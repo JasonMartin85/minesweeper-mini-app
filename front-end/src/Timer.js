@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react'
+import {bombContext} from "./App.js"
 
 
 const Timer = () => {
   const[startTime,setStartTime] = useState();
   const[timeElapsed,setTimeElapsed] = useState()
+  const {gameState, setGameState} = React.useContext(bombContext)
   useEffect(()=>{
     setStartTime(new Date())
   },[])
