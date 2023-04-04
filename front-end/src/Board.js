@@ -1,6 +1,27 @@
 import './App.css'
 
 export default function Board(props) {
+
+  const locationClicked = (obj) => {
+    obj.wasClicked = true;
+    if (obj.isBomb)
+      alert('BOOOOOOM!')
+    
+    let tempArray = []
+    
+    props.board.map(
+        row => row.map(obj => {
+          if(obj.wasClicked === true) {
+            tempArray.push(obj.num)
+          }}
+          
+          )
+      )
+    
+    console.log(tempArray)
+
+      }
+
   return (
     <div >
       <div className="container">
@@ -10,14 +31,17 @@ export default function Board(props) {
               key={rowIndex}
               className="row"
             >
-              {row.map((num, numIndex) => {
+              {row.map((obj, numIndex) => {
                 return (
                   <span
                     key={numIndex}
-                    className="col"
                     className="num"
+                    onClick={()=>locationClicked(obj)}
                   >
-                    {num}
+                    {obj.isBomb ?
+                     <img className="bombImage" src="./bomb.png"/> 
+                     : <span>{obj.num}</span>}
+                    
                   </span>
                 );
               })}

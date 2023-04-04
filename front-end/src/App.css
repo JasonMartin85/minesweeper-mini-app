@@ -8,7 +8,7 @@
   height: 50px;
   width: 500px;
   margin: 50px;
-  border: 2px solid black;
+  /* border: 2px solid black; */
 }
 
 .row {
@@ -23,6 +23,12 @@
   text-align: center;
   justify-content: center;
   align-items: center;
+}
+
+.bombImage {
+  margin-top: 5px;
+  height: 40px;
+  width: 40px;
 }
 
 /* style={{
