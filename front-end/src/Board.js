@@ -1,6 +1,14 @@
 import './App.css'
+import {useEffect,useState} from 'react'
 
 export default function Board(props) {
+  const [toggle,setToggle] = useState(false);
+
+  useEffect(()=>{
+
+  },[toggle])
+
+
 
   const locationClicked = (obj) => {
     obj.wasClicked = true;
@@ -13,12 +21,12 @@ export default function Board(props) {
         row => row.map(obj => {
           if(obj.wasClicked === true) {
             tempArray.push(obj.num)
-          }}
+          }} 
           
           )
-      )
-    
-    console.log(tempArray)
+      ) 
+    setToggle(!toggle)
+    // console.log(tempArray)
 
       }
 
@@ -40,7 +48,8 @@ export default function Board(props) {
                   >
                     {obj.isBomb ?
                      <img className="bombImage" src="./bomb.png"/> 
-                     : <span>{obj.num}</span>}
+                     : obj.wasClicked === true ? <span>{obj.adjacentBombCount}</span>: <></>}
+                     
                     
                   </span>
                 );
