@@ -1,19 +1,28 @@
 import './App.css'
-import {useEffect,useState} from 'react'
+import React, {useEffect,useState} from 'react'
+import {bombContext} from "./App.js"
 
 export default function Board(props) {
   const [toggle,setToggle] = useState(false);
+  const {gameState, setGameState} = React.useContext(bombContext)
+  
 
   useEffect(()=>{
-
+    
   },[toggle])
-
-
-
+  
+  
+  
   const locationClicked = (obj) => {
     obj.wasClicked = true;
-    if (obj.isBomb)
-      alert('BOOOOOOM!')
+
+    setToggle(!toggle)
+    if (obj.isBomb) {
+      setTimeout(()=>alert('BOOOOOOM!'),0)
+      setGameState(false)
+    }
+
+    console.log(obj.adjArray)
     
     let tempArray = []
     
@@ -25,11 +34,22 @@ export default function Board(props) {
           
           )
       ) 
-    setToggle(!toggle)
-    // console.log(tempArray)
 
-      }
+    // console.log(tempArray.length)
 
+    }
+  
+  useEffect(()=>{
+    if(gameState === false) {
+      props.board.forEach(
+        row => row.forEach(obj => {
+            obj.wasClicked = true
+          })
+      )}
+      setToggle(!toggle)
+  },[gameState])
+  
+  
   return (
     <div >
       <div className="container">
@@ -47,8 +67,8 @@ export default function Board(props) {
                     onClick={()=>locationClicked(obj)}
                   >
                     {obj.isBomb ?
-                     <img className="bombImage" src="./bomb.png"/> 
-                     : obj.wasClicked === true ? <span>{obj.adjacentBombCount}</span>: <></>}
+                     obj.wasClicked===true   ? <img className="bombImage" src="./bomb.png"/> : <span></span> 
+                     : obj.wasClicked===true  ? <span>{obj.adjacentBombCount}</span>: <></>}
                      
                     
                   </span>

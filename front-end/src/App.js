@@ -1,7 +1,10 @@
 import Board from './Board.js'
 import React, {useState, useEffect} from 'react'
+import Timer from './Timer.js'
+export const bombContext = React.createContext();
 
 const App = () => {
+  const [gameState,setGameState] = useState(true)
 
     function adjacentBombs(index,bombLocations) {
       let adjacent = []
@@ -22,22 +25,23 @@ const App = () => {
       if (! leftEdge && !bottomEdge) adjacent.push( (index - 1) + col)
       if (! rightEdge && !bottomEdge) adjacent.push( (index + 1) + col)
 
-      console.log("Index",index,"Adjacent",adjacent)
-      console.log("Index",index,"left",!leftEdge,"right",!rightEdge,"top",!topEdge,"bottom",!bottomEdge)
-      console.log("Index",index,"left",index % col,"right",(index + 1) % col,"top",Math.floor(index / col),"bottom",Math.floor(index / col),"=",row-1)
+      // console.log("Index",index,"Adjacent",adjacent)
+      // console.log("Index",index,"left",!leftEdge,"right",!rightEdge,"top",!topEdge,"bottom",!bottomEdge)
+      // console.log("Index",index,"left",index % col,"right",(index + 1) % col,"top",Math.floor(index / col),"bottom",Math.floor(index / col),"=",row-1)
       //console.log('index',index,adjacent.filter(cell => bombLocations.includes(cell)))
       
 
-      return(adjacent.filter(cell => bombLocations.includes(cell)).length)
+      return([adjacent.filter(cell => bombLocations.includes(cell)).length,adjacent])
 
     }
     
       class CellObject {
-        constructor(num,isBomb,adjacentBombCount) {
+        constructor(num,isBomb,adjacentBombCount,adjArray) {
           this.num = num
           this.wasClicked = false
           this.isBomb = isBomb
           this.adjacentBombCount = adjacentBombCount
+          this.adjArray = adjArray
         }
       }
 
@@ -59,11 +63,14 @@ const App = () => {
     for (let row = 0; row < 10; row++) {
       let rowArray = []
       for (let col = 0; col < 10; col++){
+        let tempArray= adjacentBombs(counter,bombLocations)
         rowArray.push(
           new CellObject(
             counter,
             bombLocations.includes(counter),
-            adjacentBombs(counter,bombLocations)))
+            tempArray[0],
+            tempArray[1]
+            ))
         counter++
       }
       newBoard.push(rowArray)
@@ -75,10 +82,11 @@ const App = () => {
   },[])
 
   return (
-    <div>
+    <bombContext.Provider value={{gameState,setGameState}}>
       <h1>Minesweeper!</h1>
+      <Timer />
       {board ? <Board board={board}/> : <>Loading!</>}
-    </div>
+    </bombContext.Provider>
   )
 
 }
